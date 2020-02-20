@@ -15,12 +15,12 @@ app.get('/', (req, res) => {
     res.send('Hello world');
 });
 
-app.get('/api/movies/', (req, res) => {
+app.get('/movies/', (req, res) => {
     res.send(movies);
 });
 
 
-app.post('/api/movies', (req, res) => {
+app.post('/movies', (req, res) => {
 
     const { error } = validateMovie(req.body);
    
@@ -39,7 +39,7 @@ app.post('/api/movies', (req, res) => {
 });
 
 
-app.put('/api/movies/:id', (req, res) => {
+app.put('/movies/:id', (req, res) => {
 
     // check if movie exists, or return 404 doesn't exist
     const movie = movies.find(c => c.id === parseInt(req.params.id));
@@ -73,7 +73,7 @@ function validateMovie(movie) {
 }
 
 
-app.delete('/api/movies/:id', (req, res) => {
+app.delete('/movies/:id', (req, res) => {
     const movie = movies.find(c => c.id === parseInt(req.params.id));
     if (!movie) { //404
         return res.status(404).send('The movie with the given id was not found')
@@ -87,7 +87,7 @@ app.delete('/api/movies/:id', (req, res) => {
 
 
 
-app.get('/api/movies/:id', (req, res) => {
+app.get('/movies/:id', (req, res) => {
     const movie = movies.find(c => c.id === parseInt(req.params.id));
     if (!movie) { //404
        return res.status(404).send('The movie with the given id was not found')

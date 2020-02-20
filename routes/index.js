@@ -1,9 +1,12 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
+const router = express.Router();
 
 const app = express();
 
 app.use(express.json());
+
+
 
 const movies = [
     { id: 1, title: 'movie1' },
@@ -11,16 +14,38 @@ const movies = [
     { id: 3, title: 'movie3' },
 ]
 
-app.get('/', (req, res) => {
+
+function validateMovie(movie) {
+    const schema = Joi.object({
+        title: Joi.string().min(2).required()
+    });
+
+
+    // check if movie validates fields, or return 400 invalid
+
+    return schema.validate(movie);
+}
+
+
+router.get('/', (req, res) => {
     res.send('Hello world');
 });
 
-app.get('/movies/', (req, res) => {
+router.get('/movies/', (req, res) => {
     res.send(movies);
 });
 
 
-app.post('/movies', (req, res) => {
+router.get('/movies/:id', (req, res) => {
+    const movie = movies.find(c => c.id === parseInt(req.params.id));
+    if (!movie) { //404
+       return res.status(404).send('The movie with the given id was not found')
+    }
+    res.send(movie);
+});
+
+
+router.post('/movies', (req, res) => {
 
     const { error } = validateMovie(req.body);
    
@@ -39,7 +64,7 @@ app.post('/movies', (req, res) => {
 });
 
 
-app.put('/movies/:id', (req, res) => {
+router.put('/movies/:id', (req, res) => {
 
     // check if movie exists, or return 404 doesn't exist
     const movie = movies.find(c => c.id === parseInt(req.params.id));
@@ -56,24 +81,12 @@ app.put('/movies/:id', (req, res) => {
     // update movie if no errors
     movie.title = req.body.title;
     res.send(movie);
-})
+});
 
 
 
 
-function validateMovie(movie) {
-    const schema = Joi.object({
-        title: Joi.string().min(2).required()
-    });
-
-
-    // check if movie validates fields, or return 400 invalid
-
-    return schema.validate(movie);
-}
-
-
-app.delete('/movies/:id', (req, res) => {
+router.delete('/movies/:id', (req, res) => {
     const movie = movies.find(c => c.id === parseInt(req.params.id));
     if (!movie) { //404
         return res.status(404).send('The movie with the given id was not found')
@@ -83,19 +96,7 @@ app.delete('/movies/:id', (req, res) => {
     movies.splice(index, 1);    // delete movie from array
 
     res.send(movie);
-})
-
-
-
-app.get('/movies/:id', (req, res) => {
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) { //404
-       return res.status(404).send('The movie with the given id was not found')
-    }
-    res.send(movie);
 });
 
 
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port} ...`));
+module.exports = router;

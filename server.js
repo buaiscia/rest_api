@@ -1,9 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 const assert = require('assert');
-
+const mongoose = require("mongoose");
 const app = express();
 
+
+//  MONGODB SETUP
+
+const url = process.env.DATABASEURL || 'mongodb://localhost:27017'
+
+const dbName = 'moviesDB';
+
+mongoose.connect(`${url}/${dbName}`,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log('Database connection successful');
+    })
+    .catch(err => {
+        console.error('Database connection error');
+    });
 
 // CALL MODULES
 

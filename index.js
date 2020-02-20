@@ -6,9 +6,9 @@ const app = express();
 app.use(express.json());
 
 const movies = [
-    { id: 1, name: 'movie1' },
-    { id: 2, name: 'movie2' },
-    { id: 3, name: 'movie3' },
+    { id: 1, title: 'movie1' },
+    { id: 2, title: 'movie2' },
+    { id: 3, title: 'movie3' },
 ]
 
 app.get('/', (req, res) => {
@@ -16,21 +16,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/movies/', (req, res) => {
-    res.send(courses);
+    res.send(movies);
 });
 
 
 app.post('/api/movies', (req, res) => {
 
-    const schema = Joi.object({
-        title: Joi.string().min(2).required()
-    });
-
-    const result = schema.validate(req.body);
-
-
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
+    const { error } = validateMovie(req.body);
+   
+    // if field missing return 400
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
 
@@ -51,16 +47,10 @@ app.put('/api/movies/:id', (req, res) => {
         res.status(404).send('The movie with the given id was not found')
     }
 
-    const schema = Joi.object({
-        title: Joi.string().min(2).required()
-    });
-
-
-    // check if movie validates fields, or return 400 invalid
-
-    const result = schema.validate(req.body);
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
+    const { error } = validateMovie(req.body);
+   
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
 
@@ -71,6 +61,30 @@ app.put('/api/movies/:id', (req, res) => {
 
 
 
+
+function validateMovie(movie) {
+    const schema = Joi.object({
+        title: Joi.string().min(2).required()
+    });
+
+
+    // check if movie validates fields, or return 400 invalid
+
+    return schema.validate(movie);
+}
+
+
+app.delete('/api/movies/:id', (req, res) => {
+    const movie = movies.find(c => c.id === parseInt(req.params.id));
+    if (!movie) { //404
+        res.status(404).send('The movie with the given id was not found')
+    }
+
+    const index = movies.indexOf(movie); //take index in array to find
+    movies.splice(index, 1);    // delete movie from array
+
+    res.send(movie);
+})
 
 
 

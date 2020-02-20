@@ -1,10 +1,16 @@
-const Joi = require('@hapi/joi');
 const express = require('express');
 const cors = require('cors');
+const assert = require('assert');
+
 
 const app = express();
 
+
+// CALL MODULES
+
 app.use(express.json());
+
+
 
 //SETUP CORS
 
@@ -23,18 +29,20 @@ app.use(cors({
 }));
 
 // SET ROUTES
+
 const indexRoute = require("./routes/index");
+
 
 // USE ROUTES
 
 app.use('/', indexRoute)
-
 
 app.get('*', function(req, res) {
     res.status(404).send('Page not found');
 });
 
 
+// SERVER
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port} ...`));

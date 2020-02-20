@@ -2,6 +2,8 @@ const express = require('express');
 
 const app = express();
 
+app.use(express.json());
+
 const movies = [
     { id: 1, name: 'movie1'},
     { id: 2, name: 'movie2'},
@@ -15,6 +17,20 @@ app.get('/', (req, res) => {
 app.get('/api/movies/', (req, res) => {
     res.send(courses);
 });
+
+
+app.post('/api/movies', (req, res) => {
+    const movie = {
+        id: movies.length + 1,
+        title: req.body.title
+    };
+    movies.push(movie);
+    res.send(movie);
+})
+
+
+
+
 
 
 app.get('/api/movies/:id', (req, res) => {

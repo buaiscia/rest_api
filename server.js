@@ -4,6 +4,8 @@ const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const app = express();
 
+app.use(express.static(__dirname + '/view'));
+
 
 //  MONGODB SETUP
 
@@ -48,13 +50,13 @@ app.use(cors({
 // SET ROUTES
 
 const indexRoute = require('./routes/index');
-const uploadFIle = require('./routes/upload');
+const uploadFile = require('./routes/upload');
 
 
 // USE ROUTES
 
 app.use('/', indexRoute);
-app.use('/upload', uploadFIle);
+app.use('/upload', uploadFile);
 
 app.get('*', function (req, res) {
     res.status(404).send('Page not found');

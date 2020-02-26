@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const assert = require('assert');
-const mongoose = require("mongoose");
+const fileUpload = require('express-fileupload');
+const mongoose = require('mongoose');
 const app = express();
 
 
@@ -27,12 +27,12 @@ mongoose.connect(`${url}/${dbName}`,
 
 app.use(express.json());
 
-
+app.use(fileUpload());
 
 //SETUP CORS
 
 const allowedOrigins = ['http://localhost:3000',
-    'http://localhost:4000'];
+                        'http://someotherproxy'];
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -47,12 +47,14 @@ app.use(cors({
 
 // SET ROUTES
 
-const indexRoute = require("./routes/index");
+const indexRoute = require('./routes/index');
+const uploadFIle = require('./routes/upload');
 
 
 // USE ROUTES
 
-app.use('/', indexRoute)
+app.use('/', indexRoute);
+app.use('/upload', uploadFIle);
 
 app.get('*', function (req, res) {
     res.status(404).send('Page not found');

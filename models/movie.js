@@ -18,3 +18,5 @@ const movieSchema = new mongoose.Schema({
     },
     childrenFriendly : Boolean
 })
+
+module.exports = mongoose.model("movie", movieSchema);

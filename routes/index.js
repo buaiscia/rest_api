@@ -8,11 +8,11 @@ app.use(express.json());
 
 
 
-const movies = [
-    { id: 1, title: 'movie1' },
-    { id: 2, title: 'movie2' },
-    { id: 3, title: 'movie3' },
-]
+// const movies = [
+//     { id: 1, title: 'movie1' },
+//     { id: 2, title: 'movie2' },
+//     { id: 3, title: 'movie3' },
+// ]
 
 
 function validateMovie(movie) {

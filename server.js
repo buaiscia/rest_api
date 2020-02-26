@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const assert = require('assert');
 const mongoose = require("mongoose");
 const app = express();
 
@@ -37,10 +36,10 @@ const allowedOrigins = ['http://localhost:3000',
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified origin'
-            return callback(new Error(msg), false);
-        }
+        // if (allowedOrigins.indexOf(origin) === -1) {
+        //     const msg = 'The CORS policy for this site does not allow access from the specified origin'
+        //     return callback(new Error(msg), false);
+        // }
         return callback(null, true);
     }
 }));
@@ -48,9 +47,13 @@ app.use(cors({
 // SET ROUTES
 
 const indexRoute = require("./routes/index");
+const uploadRoute = require('./routes/upload')
 
 
 // USE ROUTES
+
+
+app.use('/upload', uploadRoute)
 
 app.use('/', indexRoute)
 

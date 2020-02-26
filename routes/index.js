@@ -9,9 +9,9 @@ app.use(express.json());
 
 
 const movies = [
-    { id: 1, title: 'movie1' },
-    { id: 2, title: 'movie2' },
-    { id: 3, title: 'movie3' },
+    // { id: 1, title: 'movie1' },
+    // { id: 2, title: 'movie2' },
+    // { id: 3, title: 'movie3' },
 ]
 
 
@@ -32,7 +32,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/movies/', (req, res) => {
-    res.send(movies);
+    if(movies.length > 0) res.send(movies);
+    else res.send('movies not found');
 });
 
 

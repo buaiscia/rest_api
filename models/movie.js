@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const movieSchema = new mongoose.Schema({
+    // id: mongoose.Types.ObjectId(),
     title: String,
     director: String,
     description: String,
@@ -19,4 +20,6 @@ const movieSchema = new mongoose.Schema({
     childrenFriendly : Boolean
 })
 
-module.exports = mongoose.model("movie", movieSchema);
+var Movie = mongoose.model('Movie', movieSchema);
+ 
+module.exports = Movie;

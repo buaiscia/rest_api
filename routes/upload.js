@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const app = express();
 const path = require('path');
 
-const fileUpload = require('express-fileupload');
+const uploading = require('./uploading');
+// const app = express();
 
-app.use(fileUpload());
 
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views', 'upload.html'));
-});
+    res.sendFile('upload.html', {
+        root: path.join(__dirname, '../views/')
+    });
+
+})
+
+router.post('/', uploading.post);
+
 
 module.exports = router;

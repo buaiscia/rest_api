@@ -4,17 +4,19 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Upload to database</title>
+    <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 
 <body>
-    <p>Upload the collection here</p>
-    <form action="/" method="POST" encType="multipart/form-data">
-        <input type="file" name="file" accept="*.csv" />
-        <br/>
-        <br/>
-        <input type="submit" value="Upload the collection" />
+    <h2>With Node.js
+        <code>"http"</code> module</h2>
+    <form action="/upload" enctype="multipart/form-data" method="post">
+        <div>File:
+            <input type="file" name="multipleFiles" multiple="multiple" />
+        </div>
+        <input type="submit" value="Upload" />
     </form>
 </body>
 

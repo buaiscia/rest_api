@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const app = express();
 
 app.use(express.static(__dirname + '/view'));
+
 
 
 //  MONGODB SETUP
@@ -29,8 +29,6 @@ mongoose.connect(`${url}/${dbName}`,
 
 app.use(express.json());
 
-app.use(fileUpload());
-
 //SETUP CORS
 
 const allowedOrigins = ['http://localhost:3000',
@@ -39,24 +37,26 @@ const allowedOrigins = ['http://localhost:3000',
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified origin'
-            return callback(new Error(msg), false);
-        }
+        // if (allowedOrigins.indexOf(origin) === -1) {
+        //     const msg = 'The CORS policy for this site does not allow access from the specified origin'
+        //     return callback(new Error(msg), false);
+        // }
         return callback(null, true);
     }
 }));
 
 // SET ROUTES
 
-const indexRoute = require('./routes/index');
-const uploadFile = require('./routes/upload');
+const indexRoute = require("./routes/index");
+const uploadRoute = require('./routes/upload')
 
 
 // USE ROUTES
 
-app.use('/', indexRoute);
-app.use('/upload', uploadFile);
+
+app.use('/upload', uploadRoute)
+
+app.use('/', indexRoute)
 
 app.get('*', function (req, res) {
     res.status(404).send('Page not found');

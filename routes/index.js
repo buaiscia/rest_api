@@ -1,5 +1,8 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
+const mongoose = require('mongoose')
+const Movie = require('../models/movie');
+
 const router = express.Router();
 
 const app = express();
@@ -7,12 +10,11 @@ const app = express();
 app.use(express.json());
 
 
-
-// const movies = [
-//     { id: 1, title: 'movie1' },
-//     { id: 2, title: 'movie2' },
-//     { id: 3, title: 'movie3' },
-// ]
+const movies = [
+    // { id: 1, title: 'movie1' },
+    // { id: 2, title: 'movie2' },
+    // { id: 3, title: 'movie3' },
+]
 
 
 function validateMovie(movie) {
@@ -29,10 +31,13 @@ function validateMovie(movie) {
 
 router.get('/', (req, res) => {
     res.send('Hello world');
+    
+
 });
 
 router.get('/movies/', (req, res) => {
-    res.send(movies);
+    if(movies.length > 0) res.send(movies);
+    else res.send('movies not found');
 });
 
 
@@ -97,6 +102,7 @@ router.delete('/movies/:id', (req, res) => {
 
     res.send(movie);
 });
+
 
 
 module.exports = router;

@@ -15,10 +15,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
-<<<<<<< HEAD
-=======
     "formidable": "^1.2.2",
->>>>>>> temporary
     "mongodb": "^3.5.3",
     "mongoose": "^5.9.1"
   }

@@ -36,8 +36,14 @@ router.get('/', (req, res) => {
 });
 
 router.get('/movies/', (req, res) => {
-    if(movies.length > 0) res.send(movies);
-    else res.send('movies not found');
+    // if(movies.length > 0) res.send(movies);
+    // else res.send('movies not found');
+    Movie.find(function(err, movies) {
+        if(err) {
+            return res.status(500).json({ status: 500, message: err.message})
+        }
+        res.status(200).send(movies);
+    })
 });
 
 

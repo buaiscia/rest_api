@@ -1,14 +1,16 @@
-const mongoose = require('mongoose');
-
-const Movie = require('../models/movie');
 
 
 
 exports.post = function (req, res) {
-   
+
     const formidable = require('formidable');
     const path = require('path');
     const fs = require("fs");
+    const assert = require('assert');
+
+    const Movie = require('../models/movie');
+
+
 
 
     const form = new formidable.IncomingForm({ multiples: true });
@@ -27,7 +29,10 @@ exports.post = function (req, res) {
         let fileToRead = fs.readFileSync(pathFile, 'utf-8');
         let parsed = JSON.parse(fileToRead);
         console.log(parsed);
-        
+        Movie.collection.insertMany(parsed, function (err, r) {
+            assert.equal(null, err);
+        });
+
     });
 
     form.on('file', function (name, file) {
@@ -37,6 +42,6 @@ exports.post = function (req, res) {
     res.sendFile('upload.html', {
         root: path.join(__dirname, '../views/')
     });
-    
-    
+
+
 }

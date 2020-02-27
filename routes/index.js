@@ -1,10 +1,14 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
 const router = express.Router();
+const fileUpload = require('express-fileupload')
 
 const app = express();
 
 app.use(express.json());
+router.use(fileUpload({
+    debug: true
+}));
 
 
 
@@ -29,6 +33,8 @@ function validateMovie(movie) {
 
 router.get('/', (req, res) => {
     res.send('Hello world');
+    
+
 });
 
 router.get('/movies/', (req, res) => {
@@ -98,6 +104,7 @@ router.delete('/movies/:id', (req, res) => {
 
     res.send(movie);
 });
+
 
 
 module.exports = router;

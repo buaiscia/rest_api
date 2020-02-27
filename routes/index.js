@@ -42,6 +42,9 @@ router.get('/movies/', (req, res) => {
         if(err) {
             return res.status(500).json({ status: 500, message: err.message})
         }
+        if(Object.keys(movies).length === 0) {
+            return res.status(404).json({ status: 404, message: 'no movie found'})
+        }
         res.status(200).send(movies);
     })
 });

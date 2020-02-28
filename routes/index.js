@@ -29,13 +29,13 @@ function validateMovie(movie) {
 }
 
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     res.send('Hello world');
 
 
 });
 
-router.get('/movies/', (req, res) => {
+router.get('/movies/', (req, res, next) => {
     // if(movies.length > 0) res.send(movies);
     // else res.send('movies not found');
     Movie.find(function (err, movies) {
@@ -50,7 +50,7 @@ router.get('/movies/', (req, res) => {
 });
 
 
-router.get('/movies/:id', (req, res) => {
+router.get('/movies/:id', (req, res, next) => {
     // const movie = movies.find(c => c.id === parseInt(req.params.id));
     // if (!movie) { //404
     //    return res.status(404).send('The movie with the given id was not found')
@@ -65,9 +65,9 @@ router.get('/movies/:id', (req, res) => {
 });
 
 
-router.post('/movies', (req, res) => {
+router.post('/movies', (req, res, next) => {
 
-    console.log(req.body);
+    // console.log(req.body);
 
 
     const movie = new Movie({
@@ -111,9 +111,12 @@ router.post('/movies', (req, res) => {
 });
 
 
-router.put('/movies/:id', (req, res) => {
+router.put('/movies/:id', (req, res, next) => {
 
     Movie.findById(req.params.id, function (err, movie) {
+        if(err) {
+            return res.status(500).json({ status: 500, message: err.message });
+        }
         movie.title = req.body.title;
         movie.director = req.body.director;
         movie.description = req.body.description;
@@ -146,7 +149,7 @@ router.put('/movies/:id', (req, res) => {
     // res.send(movie);
 });
 
-router.delete('/movies/:id', (req, res) => {
+router.delete('/movies/:id', (req, res, next) => {
     
     Movie.findById(req.params.id, function (err, movie) {
         movie.remove(function(err, movie) {

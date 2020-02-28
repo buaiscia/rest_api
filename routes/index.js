@@ -28,11 +28,37 @@ router.get('/movies/', (req, res, next) => {
 
     Movie.find()
         .exec()
-        .then(results => {
-            if (Object.keys(results).length === 0) {
+        .then(movies => {
+            if (Object.keys(movies).length === 0) {
                 res.status(404).json({ status: 404, message: 'No movie found' });
             }
             else {
+                const page = parseInt(req.query.page);
+                const limit = parseInt(req.query.limit);
+
+                const startIndex = (page - 1) * limit;
+                const endIndex = page * limit;
+
+                const results = {};
+
+                if(endIndex < movies.length) {
+                    results.next = {
+                        page: page + 1,
+                        limit: limit
+                    }
+                }
+                
+
+                if (startIndex > 0) {
+                    results.previous = {
+                        page: page - 1,
+                        limit: limit
+                    }
+                }
+
+
+                results.results = movies.slice(startIndex, endIndex)
+
                 res.status(200).send(results);
             }
         })

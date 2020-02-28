@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
-const bodyParser	= require('body-parser');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 
@@ -39,7 +39,7 @@ app.use(express.json());
 //SETUP CORS
 
 const allowedOrigins = ['http://localhost:3000',
-                        'http://someotherproxy'];
+    'http://someotherproxy'];
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -65,9 +65,22 @@ app.use('/upload', uploadRoute)
 
 app.use('/', indexRoute)
 
-app.get('*', function (req, res) {
-    res.status(404).send('Page not found');
-});
+// app.get('*', function (req, res) {
+//     res.status(404).send('Page not found');
+// });
+
+app.use((req, res, next) => {
+    const error = new Error('Not found');
+    error.status = 404;
+    next(error);
+})
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: { message: error.message }
+    })
+})
 
 
 // SERVER

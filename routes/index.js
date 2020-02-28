@@ -58,7 +58,7 @@ router.get('/movies/:id', (req, res, next) => {
     // res.send(movie);
     Movie.findById(req.params.id, function (err, movie) {
         if (err) {
-            return res.status(404).json({ status: 404, message: 'Movie not found' });
+            return res.status(500).json({ status: 500, message: 'Movie not found' });
         }
         res.status(200).send(movie);
     })

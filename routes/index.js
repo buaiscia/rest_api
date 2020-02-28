@@ -146,19 +146,25 @@ router.put('/movies/:id', (req, res) => {
     // res.send(movie);
 });
 
-
-
-
 router.delete('/movies/:id', (req, res) => {
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) { //404
-        return res.status(404).send('The movie with the given id was not found')
-    }
+    
+    Movie.findById(req.params.id, function (err, movie) {
+        movie.remove(function(err, movie) {
+            if(err) {
+                return res.status(500).json({ status: 500, message: err.message });
+            }
+            res.status(200).json({ status: 200, message: "Movie deleted"})
+        });
+    });
+    // const movie = movies.find(c => c.id === parseInt(req.params.id));
+    // if (!movie) { //404
+    //     return res.status(404).send('The movie with the given id was not found')
+    // }
 
-    const index = movies.indexOf(movie); //take index in array to find
-    movies.splice(index, 1);    // delete movie from array
+    // const index = movies.indexOf(movie); //take index in array to find
+    // movies.splice(index, 1);    // delete movie from array
 
-    res.send(movie);
+    // res.send(movie);
 });
 
 

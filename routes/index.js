@@ -87,8 +87,8 @@ router.post('/movies', (req, res) => {
     });
 
 
-    movie.save(function(err, movie) {
-        if(err) {
+    movie.save(function (err, movie) {
+        if (err) {
             return res.status(500).json({ status: 500, message: err.message });
         }
         res.status(200).send(movie);
@@ -113,21 +113,37 @@ router.post('/movies', (req, res) => {
 
 router.put('/movies/:id', (req, res) => {
 
-    // check if movie exists, or return 404 doesn't exist
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) { //404
-        return res.status(404).send('The movie with the given id was not found')
-    }
+    Movie.findById(req.params.id, function (err, movie) {
+        movie.title = req.body.title;
+        movie.director = req.body.director;
+        movie.description = req.body.description;
+        movie.shortDescription = req.body.shortDescription;
+        movie.duration = req.body.duration;
+        movie.releaseDate = req.body.releaseDate;
+        movie.images = req.body.images;
+        movie.genre = req.body.genre;
+        movie.childrenFriendly = req.body.childrenFriendly;
+        movie.save(function(err) {
+            if(err) {
+                return res.status(500).json({ status: 500, message: err.message });
+            }
+            res.status(200).send(movie);
+        });
+    });
 
-    const { error } = validateMovie(req.body);
+    // const movie = movies.find(c => c.id === parseInt(req.params.id));
+    // if (!movie) { //404
+    //     return res.status(404).send('The movie with the given id was not found')
+    // }
 
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
+    // const { error } = validateMovie(req.body);
 
-    // update movie if no errors
-    movie.title = req.body.title;
-    res.send(movie);
+    // if (error) {
+    //     return res.status(400).send(error.details[0].message);
+    // }
+
+    // movie.title = req.body.title;
+    // res.send(movie);
 });
 
 

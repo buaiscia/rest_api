@@ -38,15 +38,21 @@ router.get('/', (req, res, next) => {
 router.get('/movies/', (req, res, next) => {
     // if(movies.length > 0) res.send(movies);
     // else res.send('movies not found');
-    Movie.find(function (err, movies) {
-        if (err) {
-            return res.status(500).json({ status: 500, message: err.message });
-        }
-        if (Object.keys(movies).length === 0) {
-            return res.status(404).json({ status: 404, message: 'no movie found' });
-        }
-        res.status(200).send(movies);
-    })
+
+    Movie.find()
+        .exec()
+        .then(results => {
+            if (Object.keys(results).length === 0) {
+                res.status(404).json({ status: 404, message: 'No movie found' });
+            }
+            else {
+                res.status(200).send(results);
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: err.message });
+        })
+
 });
 
 
@@ -56,12 +62,20 @@ router.get('/movies/:id', (req, res, next) => {
     //    return res.status(404).send('The movie with the given id was not found')
     // }
     // res.send(movie);
-    Movie.findById(req.params.id, function (err, movie) {
-        if (err) {
-            return res.status(500).json({ status: 500, message: 'Movie not found' });
-        }
-        res.status(200).send(movie);
-    })
+
+    const id = req.params.id;
+    Movie.findById(id)
+        .then(result => {
+            if (result) {
+                res.status(200).send(result);
+            }
+            else {
+                res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+        })
 });
 
 
@@ -71,6 +85,7 @@ router.post('/movies', (req, res, next) => {
 
 
     const movie = new Movie({
+        _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         director: req.body.director,
         description: req.body.description,
@@ -86,13 +101,15 @@ router.post('/movies', (req, res, next) => {
         childrenFriendly: req.body.childrenFriendly
     });
 
-
-    movie.save(function (err, movie) {
-        if (err) {
-            return res.status(500).json({ status: 500, message: err.message });
-        }
-        res.status(200).send(movie);
-    })
+    movie
+        .save()
+        .exec()
+        .then(result => {
+            res.status(200).send(result);
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: err.message });
+        })
 
 
     // const { error } = validateMovie(req.body);
@@ -113,26 +130,52 @@ router.post('/movies', (req, res, next) => {
 
 router.put('/movies/:id', (req, res, next) => {
 
-    Movie.findById(req.params.id, function (err, movie) {
-        if(err) {
-            return res.status(500).json({ status: 500, message: err.message });
-        }
-        movie.title = req.body.title;
-        movie.director = req.body.director;
-        movie.description = req.body.description;
-        movie.shortDescription = req.body.shortDescription;
-        movie.duration = req.body.duration;
-        movie.releaseDate = req.body.releaseDate;
-        movie.images = req.body.images;
-        movie.genre = req.body.genre;
-        movie.childrenFriendly = req.body.childrenFriendly;
-        movie.save(function(err) {
-            if(err) {
-                return res.status(500).json({ status: 500, message: err.message });
-            }
-            res.status(200).send(movie);
-        });
-    });
+    // Movie.findById(req.params.id, function (err, movie) {
+    //     if (err) {
+    //         return res.status(500).json({ status: 500, message: err.message });
+    //     }
+    //     movie.title = req.body.title;
+    //     movie.director = req.body.director;
+    //     movie.description = req.body.description;
+    //     movie.shortDescription = req.body.shortDescription;
+    //     movie.duration = req.body.duration;
+    //     movie.releaseDate = req.body.releaseDate;
+    //     movie.images = req.body.images;
+    //     movie.genre = req.body.genre;
+    //     movie.childrenFriendly = req.body.childrenFriendly;
+    //     movie.save(function (err) {
+    //         if (err) {
+    //             return res.status(500).json({ status: 500, message: err.message });
+    //         }
+    //         res.status(200).send(movie);
+    //     });
+    // });
+
+    const id = req.params.id;
+    Movie.findById(id)
+        .then(movie => {
+            movie.title = req.body.title;
+            movie.director = req.body.director;
+            movie.description = req.body.description;
+            movie.shortDescription = req.body.shortDescription;
+            movie.duration = req.body.duration;
+            movie.releaseDate = req.body.releaseDate;
+            movie.images = req.body.images;
+            movie.genre = req.body.genre;
+            movie.childrenFriendly = req.body.childrenFriendly;
+            movie.save()
+                .then(result => {
+                    res.status(200).send(movie);
+                })
+                .catch(err => {
+                    res.status(500).json({ status: 500, message: err.message });
+                })
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: err.message });
+        })
+
+
 
     // const movie = movies.find(c => c.id === parseInt(req.params.id));
     // if (!movie) { //404
@@ -150,15 +193,29 @@ router.put('/movies/:id', (req, res, next) => {
 });
 
 router.delete('/movies/:id', (req, res, next) => {
-    
-    Movie.findById(req.params.id, function (err, movie) {
-        movie.remove(function(err, movie) {
-            if(err) {
-                return res.status(500).json({ status: 500, message: err.message });
-            }
-            res.status(200).json({ status: 200, message: "Movie deleted"})
-        });
-    });
+
+    // Movie.findById(req.params.id, function (err, movie) {
+    //     movie.remove(function (err, movie) {
+    //         if (err) {
+    //             return res.status(500).json({ status: 500, message: err.message });
+    //         }
+    //         res.status(200).json({ status: 200, message: "Movie deleted" })
+    //     });
+    // });
+
+    const id = req.params.id;
+    Movie.remove({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json({ status: 200, deletedMovie: result, message: "Movie deleted" })
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: err.message });
+        })
+
+
+
+
     // const movie = movies.find(c => c.id === parseInt(req.params.id));
     // if (!movie) { //404
     //     return res.status(404).send('The movie with the given id was not found')

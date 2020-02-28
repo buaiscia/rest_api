@@ -31,19 +31,19 @@ function validateMovie(movie) {
 
 router.get('/', (req, res) => {
     res.send('Hello world');
-    
+
 
 });
 
 router.get('/movies/', (req, res) => {
     // if(movies.length > 0) res.send(movies);
     // else res.send('movies not found');
-    Movie.find(function(err, movies) {
-        if(err) {
-            return res.status(500).json({ status: 500, message: err.message})
+    Movie.find(function (err, movies) {
+        if (err) {
+            return res.status(500).json({ status: 500, message: err.message });
         }
-        if(Object.keys(movies).length === 0) {
-            return res.status(404).json({ status: 404, message: 'no movie found'})
+        if (Object.keys(movies).length === 0) {
+            return res.status(404).json({ status: 404, message: 'no movie found' });
         }
         res.status(200).send(movies);
     })
@@ -51,30 +51,63 @@ router.get('/movies/', (req, res) => {
 
 
 router.get('/movies/:id', (req, res) => {
-    const movie = movies.find(c => c.id === parseInt(req.params.id));
-    if (!movie) { //404
-       return res.status(404).send('The movie with the given id was not found')
-    }
-    res.send(movie);
+    // const movie = movies.find(c => c.id === parseInt(req.params.id));
+    // if (!movie) { //404
+    //    return res.status(404).send('The movie with the given id was not found')
+    // }
+    // res.send(movie);
+    Movie.findById(req.params.id, function (err, movie) {
+        if (err) {
+            return res.status(404).json({ status: 404, message: 'Movie not found' });
+        }
+        res.status(200).send(movie);
+    })
 });
 
 
 router.post('/movies', (req, res) => {
 
-    const { error } = validateMovie(req.body);
-   
-    // if field missing return 400
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-        
-    }
+    console.log(req.body);
 
-    const movie = {
-        id: movies.length + 1,
-        title: req.body.title
-    };
-    movies.push(movie);
-    res.send(movie);
+
+    const movie = new Movie({
+        title: req.body.title,
+        director: req.body.director,
+        description: req.body.description,
+        shortDescription: req.body.shortDescription,
+        duration: req.body.duration,
+        releaseDate: req.body.releaseDate,
+        images: req.body.images,
+        genre: req.body.genre,
+        // genre: {
+        //     id: req.body.genre.id,
+        //     name: req.body.genre.name
+        // },
+        childrenFriendly: req.body.childrenFriendly
+    });
+
+
+    movie.save(function(err, movie) {
+        if(err) {
+            return res.status(500).json({ status: 500, message: err.message });
+        }
+        res.status(200).send(movie);
+    })
+
+
+    // const { error } = validateMovie(req.body);
+
+    // if (error) {
+    //     return res.status(400).send(error.details[0].message);
+
+    // }
+
+    // const movie = {
+    //     id: movies.length + 1,
+    //     title: req.body.title
+    // };
+    // movies.push(movie);
+    // res.send(movie);
 });
 
 
@@ -87,9 +120,9 @@ router.put('/movies/:id', (req, res) => {
     }
 
     const { error } = validateMovie(req.body);
-   
+
     if (error) {
-       return res.status(400).send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
     }
 
     // update movie if no errors

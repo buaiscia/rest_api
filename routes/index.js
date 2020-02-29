@@ -17,6 +17,30 @@ function validateMovie(movie) {
     return schema.validate(movie);
 }
 
+function pagination(items, page, limit) {
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const results = {};
+
+    if (endIndex < items.length) {
+        results.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+
+    if (startIndex > 0) {
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+
+    results.results = items.slice(startIndex, endIndex);
+    return results;
+}
+
 
 router.get('/', (req, res, next) => {
     res.send('Hello world');
@@ -36,28 +60,7 @@ router.get('/movies/', (req, res, next) => {
                 const page = parseInt(req.query.page);
                 const limit = parseInt(req.query.limit);
 
-                const startIndex = (page - 1) * limit;
-                const endIndex = page * limit;
-
-                const results = {};
-
-                if(endIndex < movies.length) {
-                    results.next = {
-                        page: page + 1,
-                        limit: limit
-                    }
-                }
-                
-
-                if (startIndex > 0) {
-                    results.previous = {
-                        page: page - 1,
-                        limit: limit
-                    }
-                }
-
-
-                results.results = movies.slice(startIndex, endIndex)
+                const results = pagination(movies, page, limit)
 
                 res.status(200).send(results);
             }

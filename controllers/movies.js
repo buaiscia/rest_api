@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Movie = require('../models/movie');
+// const assert = require('assert')
 
 exports.get_all = (req, res, next) => {
     res.json(res.paginatedResults);

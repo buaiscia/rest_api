@@ -4,15 +4,15 @@ const movieSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: {
         type: String,
-        required: true
+        required: [true, 'Title is mandatory']
     },
     director: {
         type: String,
-        required: true
+        required: [true, 'Director is mandatory']
     },
     description: {
         type: String,
-        required: true
+        required: [true, 'Description is mandatory']
     },
     shortDescription: {
         type: String,
@@ -20,7 +20,8 @@ const movieSchema = new mongoose.Schema({
     },
     duration: {
         type: Number,
-        required: false
+        required: [true, 'Duration is mandatory'],
+        min: [10, 'Time is too little']
     },
     releaseDate: {
         type: String,
@@ -33,7 +34,7 @@ const movieSchema = new mongoose.Schema({
         },
         poster: {
             type: String,
-            required: false
+            required:  [true, 'At least the poster image is mandatory'],
         },
         background: {
             type: String,
@@ -41,14 +42,11 @@ const movieSchema = new mongoose.Schema({
         }
     },
     genre: {
-        id: {
-            type: Number,
-            required: false
-        },
         name: {
             type: String,
-            required: false
-        }
+            required: [true, 'Genre is mandatory, choose among: Documentary, Scifi, Thriller, Biography, Romance, Children, Other'],
+            enum: ['Documentary', 'Scifi', 'Thriller', 'Biography', 'Romance', 'Children', 'Other'],
+        },
     },
     childrenFriendly : {
         type: Boolean,

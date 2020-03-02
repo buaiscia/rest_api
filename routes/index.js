@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Movie = require('../models/movie');
 const MovieController = require('../controllers/movies');
 const pagination = require('../middleware/pagination');
+const { check, param } = require('express-validator');
 
 const router = express.Router();
 
@@ -32,7 +33,20 @@ router.get('/movies/:id', MovieController.get_one);
 router.get('/movies/:id/images/:type', MovieController.get_images);
 
 
-router.post('/movies', MovieController.post_one);
+router.post('/movies',
+    [
+        check('title').isLength({ min: 1}).trim().escape(),
+        check('director').isLength({ min: 2}).trim().escape(),
+        check('shortDescription').escape(),
+        check('duration').isNumeric().trim().escape(),
+        check('releaseDate').isLength({ min: 8}).trim().escape(),
+        check('images.cover').trim().escape(),
+        check('images.poster').trim().escape(),
+        check('images.background').trim().escape(),
+        check('genre.name').trim().escape(),
+        check('childrenFriendly').isBoolean()
+    ],
+     MovieController.post_one);
 
 
 router.patch('/movies/:id', MovieController.update_one);

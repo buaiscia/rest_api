@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Movie = require('../models/movie');
 
 const router = express.Router();
@@ -36,12 +36,31 @@ router.get('/movies/:id', (req, res, next) => {
                     item: result,
                     request: {
                         type: 'GET',
-                        url: req.get('host')+'/movies/'+result._id
+                        url: req.get('host') + '/movies/' + result._id
                     }
                 })
             }
             else {
                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+        })
+});
+
+
+router.get('/movies/:id/images/:type', (req, res, next) => {
+    const id = req.params.id;
+    const type = req.params.type;
+    Movie.findById(id)
+        .then(result => {
+            if (type === 'poster' || type === 'cover' || type === 'background') {
+                imgType = result.images[type];
+                res.status(200).json({ posterImage: imgType })
+            }
+            else {
+                res.status(404).json({ status: 404, message: 'type of image not found' })
             }
         })
         .catch(err => {
@@ -72,7 +91,7 @@ router.post('/movies', (req, res, next) => {
                 item: result,
                 request: {
                     type: 'GET',
-                    url: req.get('host')+'/movies/'+result._id
+                    url: req.get('host') + '/movies/' + result._id
                 }
             })
         })
@@ -92,7 +111,7 @@ router.patch('/movies/:id', (req, res, next) => {
                 item: result,
                 request: {
                     type: 'GET',
-                    url: req.get('host')+'/movies/'+id
+                    url: req.get('host') + '/movies/' + id
                 }
             })
         })
@@ -140,13 +159,6 @@ function paginatedResults(model) {
             }
         }
 
-        // const getData = {
-        //     type: 'GET',
-        //     url: req.get('host')+'/movies/'+results._id
-        // }
-
-        // results.results.getData = getData;
-
         const totalCount = await model.countDocuments().exec();
         results.count = totalCount;
 
@@ -155,6 +167,14 @@ function paginatedResults(model) {
             if (Object.keys(results.results).length === 0) {
                 res.status(404).json({ status: 404, message: 'Not found' });
             }
+
+            // for (item in results.results) {
+            //     results.results[item].getData = {}
+            //     results.results[item].getData.type = 'GET'
+            //     results.results[item].getData.url = req.get('host') + '/movies/' + results.results[item]._id
+            // }
+            // console.log(results);
+
             res.paginatedResults = results;
             next()
         } catch (error) {

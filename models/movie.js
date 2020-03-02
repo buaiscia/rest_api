@@ -33,7 +33,7 @@ const movieSchema = new mongoose.Schema({
         },
         poster: {
             type: String,
-            required: true
+            required: false
         },
         background: {
             type: String,
@@ -43,11 +43,11 @@ const movieSchema = new mongoose.Schema({
     genre: {
         id: {
             type: Number,
-            required: true
+            required: false
         },
         name: {
             type: String,
-            required: true
+            required: false
         }
     },
     childrenFriendly : {

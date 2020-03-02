@@ -1,10 +1,61 @@
 const mongoose = require('mongoose');
 const Movie = require('../models/movie');
-// const assert = require('assert')
 
 exports.get_all = (req, res, next) => {
-    res.json(res.paginatedResults);
+    // if (req.query.search) {
+    //     const search_key = req.query.search;
+    //     console.log(search_key);
+
+    //     Movie.find({ title : new RegExp(search_key, 'i') })
+    //         .then(result => {
+    //             if (result) {
+    //                 res.status(200).json({
+    //                     item: result,
+    //                     request: {
+    //                         type: 'GET',
+    //                         url: req.get('host') + '/movies/' + result._id
+    //                     }
+    //                 })
+    //             }
+    //             else {
+    //                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
+    //             }
+    //         })
+    //         .catch(err => {
+    //             res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+    //         })
+    // }
+    // else {
+        res.json(res.paginatedResults);
+
+    // }
+
 }
+
+// exports.search_many = (req, res, next) => {
+
+//     const search_key = req.query.search;
+//     console.log(search_key);
+
+//     Movie.find({ 'title': new RegExp(search_key, 'i') })
+//         .then(result => {
+//             if (result) {
+//                 res.status(200).json({
+//                     item: result,
+//                     request: {
+//                         type: 'GET',
+//                         url: req.get('host') + '/movies/' + result._id
+//                     }
+//                 })
+//             }
+//             else {
+//                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
+//             }
+//         })
+//         .catch(err => {
+//             res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+//         })
+// }
 
 exports.get_one = (req, res, next) => {
     const id = req.params.id;
@@ -47,7 +98,7 @@ exports.get_images = (req, res, next) => {
         })
 }
 
-exports.post_one = (req, res, next)  => {
+exports.post_one = (req, res, next) => {
 
     const movie = new Movie({
         _id: new mongoose.Types.ObjectId(),

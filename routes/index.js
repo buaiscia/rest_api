@@ -23,6 +23,9 @@ router.get('/', (req, res, next) => {
     res.send('Hello world');
 });
 
+// router.get('/movies?search=', MovieController.search_many);
+
+
 router.get('/movies/', pagination.paginatedResults(Movie), MovieController.get_all);
 
 
@@ -42,7 +45,7 @@ router.post('/movies',
         check('images.cover').trim().escape(),
         check('images.poster').trim().escape(),
         check('images.background').trim().escape(),
-        check('genre.name').trim().escape(),
+        check('genre').trim().escape(),
         check('childrenFriendly').isBoolean()
     ],
      MovieController.post_one);

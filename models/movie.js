@@ -40,7 +40,7 @@ const movieSchema = new mongoose.Schema({
         },
         poster: {
             type: String,
-            required:  [true, 'At least the poster image is mandatory'],
+            required: [true, 'At least the poster image is mandatory'],
         },
         background: {
             type: String,
@@ -48,18 +48,16 @@ const movieSchema = new mongoose.Schema({
         }
     },
     genre: {
-        name: {
-            type: String,
-            enum: ['Documentary', 'Scifi', 'Thriller', 'Biography', 'Romance', 'Children', 'Other'],
-            required: true
-        },
+        type: String,
+        enum: ['Documentary', 'Scifi', 'Thriller', 'Biography', 'Romance', 'Children', 'Other'],
+        required: true
     },
-    childrenFriendly : {
+    childrenFriendly: {
         type: Boolean,
         required: false
     },
 })
 
 var Movie = mongoose.model('Movie', movieSchema);
- 
+
 module.exports = Movie;

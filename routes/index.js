@@ -1,7 +1,8 @@
-const Joi = require('@hapi/joi');
+// const Joi = require('@hapi/joi');
 const express = require('express');
 const mongoose = require('mongoose');
 const Movie = require('../models/movie');
+const MovieController = require('../controllers/movies');
 
 const router = express.Router();
 
@@ -10,63 +11,24 @@ const app = express();
 app.use(express.json());
 
 
-function validateMovie(movie) {
-    const schema = Joi.object({
-        title: Joi.string().min(2).required()
-    });
-    return schema.validate(movie);
-}
+// function validateMovie(movie) {
+//     const schema = Joi.object({
+//         title: Joi.string().min(2).required()
+//     });
+//     return schema.validate(movie);
+// }
 
 router.get('/', (req, res, next) => {
     res.send('Hello world');
 });
 
-router.get('/movies/', paginatedResults(Movie), (req, res) => {
-    res.json(res.paginatedResults);
-});
+router.get('/movies/', paginatedResults(Movie), MovieController.get_all);
 
 
-router.get('/movies/:id', (req, res, next) => {
-    const id = req.params.id;
-    Movie.findById(id)
-        .select('-__v')
-        .then(result => {
-            if (result) {
-                res.status(200).json({
-                    item: result,
-                    request: {
-                        type: 'GET',
-                        url: req.get('host') + '/movies/' + result._id
-                    }
-                })
-            }
-            else {
-                res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
-            }
-        })
-        .catch(err => {
-            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
-        })
-});
+router.get('/movies/:id', MovieController.get_one);
 
 
-router.get('/movies/:id/images/:type', (req, res, next) => {
-    const id = req.params.id;
-    const type = req.params.type;
-    Movie.findById(id)
-        .then(result => {
-            if (type === 'poster' || type === 'cover' || type === 'background') {
-                imgType = result.images[type];
-                res.status(200).json({ posterImage: imgType })
-            }
-            else {
-                res.status(404).json({ status: 404, message: 'type of image not found' })
-            }
-        })
-        .catch(err => {
-            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
-        })
-});
+router.get('/movies/:id/images/:type', MovieController.get_images);
 
 
 router.post('/movies', (req, res, next) => {

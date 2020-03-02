@@ -17,58 +17,12 @@ function validateMovie(movie) {
     return schema.validate(movie);
 }
 
-function pagination(items, page, limit) {
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const results = {};
-
-    if (endIndex < items.length) {
-        results.next = {
-            page: page + 1,
-            limit: limit
-        }
-    }
-
-    if (startIndex > 0) {
-        results.previous = {
-            page: page - 1,
-            limit: limit
-        }
-    }
-
-    results.results = items.slice(startIndex, endIndex);
-    return results;
-}
-
-
 router.get('/', (req, res, next) => {
     res.send('Hello world');
-
-
 });
 
-router.get('/movies/', (req, res, next) => {
-
-    Movie.find()
-        .exec()
-        .then(movies => {
-            if (Object.keys(movies).length === 0) {
-                res.status(404).json({ status: 404, message: 'No movie found' });
-            }
-            else {
-                const page = parseInt(req.query.page);
-                const limit = parseInt(req.query.limit);
-
-                const results = pagination(movies, page, limit)
-
-                res.status(200).send(results);
-            }
-        })
-        .catch(err => {
-            res.status(500).json({ status: 500, message: err.message });
-        })
-
+router.get('/movies/', paginatedResults(Movie), (req, res) => {
+    res.json(res.paginatedResults);
 });
 
 
@@ -140,6 +94,40 @@ router.delete('/movies/:id', (req, res, next) => {
             res.status(500).json({ status: 500, message: err.message });
         })
 });
+
+
+function paginatedResults(model) {
+    return async (req, res, next) => {
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const results = {};
+
+        if (endIndex < await model.countDocuments().exec()) {
+            results.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+        if (startIndex > 0) {
+            results.previous = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        try {
+            results.results = await model.find().limit(limit).skip(startIndex).exec();
+            if (Object.keys(results.results).length === 0) {
+                res.status(404).json({ status: 404, message: 'Not found' });
+            }
+            res.paginatedResults = results;
+            next()
+        } catch (error) {
+            res.status(500).json({ message: error.message })
+        }
+    }
+}
 
 
 

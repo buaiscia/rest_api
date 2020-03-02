@@ -2,22 +2,58 @@ const mongoose = require("mongoose");
 
 const movieSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    title: String,
-    director: String,
-    description: String,
-    shortDescription: String,
-    duration: Number,
-    releaseDate: String,
+    title: {
+        type: String,
+        required: true
+    },
+    director: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    shortDescription: {
+        type: String,
+        required: false
+    },
+    duration: {
+        type: Number,
+        required: false
+    },
+    releaseDate: {
+        type: String,
+        required: false
+    },
     images: {
-        cover: String,
-        poster: String,
-        background: String
+        cover: {
+            type: String,
+            required: false
+        },
+        poster: {
+            type: String,
+            required: true
+        },
+        background: {
+            type: String,
+            required: false
+        }
     },
     genre: {
-        id: Number,
-        name: String
+        id: {
+            type: Number,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        }
     },
-    childrenFriendly : Boolean
+    childrenFriendly : {
+        type: Boolean,
+        required: false
+    },
 })
 
 var Movie = mongoose.model('Movie', movieSchema);

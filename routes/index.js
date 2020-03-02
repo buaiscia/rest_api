@@ -29,9 +29,16 @@ router.get('/movies/', paginatedResults(Movie), (req, res) => {
 router.get('/movies/:id', (req, res, next) => {
     const id = req.params.id;
     Movie.findById(id)
+        .select('-__v')
         .then(result => {
             if (result) {
-                res.status(200).send(result);
+                res.status(200).json({
+                    item: result,
+                    request: {
+                        type: 'GET',
+                        url: req.get('host')+'/movies/'+result._id
+                    }
+                })
             }
             else {
                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
@@ -61,7 +68,13 @@ router.post('/movies', (req, res, next) => {
 
     movie.save()
         .then(result => {
-            res.status(200).send(result);
+            res.status(200).json({
+                item: result,
+                request: {
+                    type: 'GET',
+                    url: req.get('host')+'/movies/'+result._id
+                }
+            })
         })
         .catch(err => {
             res.status(500).json({ status: 500, message: err.message });
@@ -74,7 +87,14 @@ router.patch('/movies/:id', (req, res, next) => {
 
     Movie.update({ _id: id }, req.body)
         .then(result => {
-            res.status(200).send(result);
+            res.status(200).json({
+                message: 'Item updated',
+                item: result,
+                request: {
+                    type: 'GET',
+                    url: req.get('host')+'/movies/'+id
+                }
+            })
         })
         .catch(err => {
             res.status(500).json({ status: 500, message: err.message });
@@ -88,7 +108,10 @@ router.delete('/movies/:id', (req, res, next) => {
     Movie.deleteOne({ _id: id })
         .exec()
         .then(result => {
-            res.status(200).json({ status: 200, deletedMovie: result, message: "Movie deleted" })
+            res.status(200).json({
+                message: 'Item deleted',
+                item: result
+            })
         })
         .catch(err => {
             res.status(500).json({ status: 500, message: err.message });
@@ -116,8 +139,19 @@ function paginatedResults(model) {
                 limit: limit
             }
         }
+
+        // const getData = {
+        //     type: 'GET',
+        //     url: req.get('host')+'/movies/'+results._id
+        // }
+
+        // results.results.getData = getData;
+
+        const totalCount = await model.countDocuments().exec();
+        results.count = totalCount;
+
         try {
-            results.results = await model.find().limit(limit).skip(startIndex).exec();
+            results.results = await model.find().select('-__v').limit(limit).skip(startIndex).exec();
             if (Object.keys(results.results).length === 0) {
                 res.status(404).json({ status: 404, message: 'Not found' });
             }

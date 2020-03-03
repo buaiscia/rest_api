@@ -1,61 +1,34 @@
 const mongoose = require('mongoose');
 const Movie = require('../models/movie');
 
+
+//REDIS SETUP
+
+const redis = require('redis');
+
+var redisClient = redis.createClient({ host: 'localhost', port: 6379 });
+
+redisClient.on('ready', function () {
+    console.log("Redis is ready");
+});
+
+redisClient.on('error', function () {
+    console.log("Error in Redis");
+});
+
+redisClient.expire('redisClient', 3600);
+
+
+// METHODS
+
 exports.get_all = (req, res, next) => {
-    // if (req.query.search) {
-    //     const search_key = req.query.search;
-    //     console.log(search_key);
-
-    //     Movie.find({ title : new RegExp(search_key, 'i') })
-    //         .then(result => {
-    //             if (result) {
-    //                 res.status(200).json({
-    //                     item: result,
-    //                     request: {
-    //                         type: 'GET',
-    //                         url: req.get('host') + '/movies/' + result._id
-    //                     }
-    //                 })
-    //             }
-    //             else {
-    //                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
-    //             }
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({ status: 500, message: 'Invalid ID provided' });
-    //         })
-    // }
-    // else {
-        res.json(res.paginatedResults);
-
-    // }
-
+    redisClient.get("/movies", function (err) {
+        if(err) {
+            res.status(500).json(err.message);
+        }
+        res.json(res.paginatedResults)
+    })
 }
-
-// exports.search_many = (req, res, next) => {
-
-//     const search_key = req.query.search;
-//     console.log(search_key);
-
-//     Movie.find({ 'title': new RegExp(search_key, 'i') })
-//         .then(result => {
-//             if (result) {
-//                 res.status(200).json({
-//                     item: result,
-//                     request: {
-//                         type: 'GET',
-//                         url: req.get('host') + '/movies/' + result._id
-//                     }
-//                 })
-//             }
-//             else {
-//                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
-//             }
-//         })
-//         .catch(err => {
-//             res.status(500).json({ status: 500, message: 'Invalid ID provided' });
-//         })
-// }
 
 exports.get_one = (req, res, next) => {
     const id = req.params.id;

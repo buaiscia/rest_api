@@ -1,4 +1,4 @@
-# TMDb React app
+# RESTful API
 
 Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 

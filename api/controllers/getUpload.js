@@ -14,7 +14,7 @@ exports.post = function (req, res) {
 
 
     const form = new formidable.IncomingForm({ multiples: true });
-    form.uploadDir = '../collection/';
+    form.uploadDir = 'collection/';
 
     form.parse(req, (err) => {
         if (err) {

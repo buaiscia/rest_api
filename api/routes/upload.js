@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-const uploading = require('./uploading');
+const getUpload = require('../controllers/getUpload');
 // const app = express();
 
 
@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 
 })
 
-router.post('/', uploading.post);
+router.post('/', getUpload.post);
 
 
 module.exports = router;

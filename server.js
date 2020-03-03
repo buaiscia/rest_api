@@ -67,8 +67,8 @@ app.use((req, res, next) => {
 
 // SET ROUTES
 
-const indexRoute = require("./routes/index");
-const uploadRoute = require('./routes/upload')
+const indexRoute = require("./api/routes/index");
+const uploadRoute = require('./api/routes/upload')
 
 
 // USE ROUTES

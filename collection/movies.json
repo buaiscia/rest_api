@@ -2,11 +2,21 @@
 	{
 		"title": "try10",
 		"director": "try20",
-		"description": "try30"
+		"description": "try30sdasdasdasdasdasdas sdfasdasdasdasd dasdas",
+		"duration": 50,
+		"images": {
+			"poster": "dasdasdasd"
+		},
+		"genre": "scifi"
 	},
 	{
-		"title": "try40",
-		"director": "try50",
-		"description": "try60"
+		"title": "try100",
+		"director": "try200",
+		"description": "tryerqewrewrerqewq30sdasdasdasdasdasdas sdfasdasdasdasd dasdas",
+		"duration": 150,
+		"images": {
+			"poster": "343244325252"
+		},
+		"genre": "scifi"
 	}
 ]

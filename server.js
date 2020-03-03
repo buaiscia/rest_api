@@ -65,6 +65,9 @@ app.use((req, res, next) => {
     next();
 })
 
+
+app.use(express.static(__dirname + "/api/public"));
+
 // SET ROUTES
 
 const indexRoute = require("./api/routes/index");

@@ -5,7 +5,7 @@ const logger = require("morgan");
 
 const app = express();
 
-// CALL MODULES
+// CONFIGURATION
 
 app.use(express.static(__dirname + "/view"));
 app.use(express.static(__dirname + "/api/public"));
@@ -14,14 +14,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger("dev"));
 
-
 //  MONGODB SETUP
 
 const url = process.env.DATABASEURL || "mongodb://localhost:27017";
 const dbName = "moviesDB";
 
-mongoose.connect(`${url}/${dbName}`,
-    {
+mongoose
+    .connect(`${url}/${dbName}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
@@ -32,29 +31,26 @@ mongoose.connect(`${url}/${dbName}`,
         console.error("Database connection error");
     });
 
-
 //SETUP HEADERS
 
 app.use((req, res, next) => {
     const allowed = "*";
     res.header("Access-Control-Allow-Origin", allowed);
-    res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Authorization");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Authorization"
+    );
     if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods",
-            "GET, POST, PATCH, PUT, DELETE");
+        res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
         return res.status(200).json({});
     }
     next();
 });
 
-
-
 // SET ROUTES
 
 const indexRoute = require("./api/routes/index");
 const uploadRoute = require("./api/routes/upload");
-
 
 // USE ROUTES
 
@@ -75,7 +71,6 @@ app.use((error, req, res) => {
         error: { message: error.message }
     });
 });
-
 
 // SERVER
 

@@ -23,7 +23,7 @@ redisClient.expire('redisClient', 3600);
 
 exports.get_all = (req, res, next) => {
     redisClient.get("/movies", function (err) {
-        if(err) {
+        if (err) {
             res.status(500).json(err.message);
         }
         res.json(res.paginatedResults)
@@ -49,7 +49,7 @@ exports.get_one = (req, res, next) => {
             }
         })
         .catch(err => {
-            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+            res.status(400).json({ status: 400, message: 'Invalid ID provided' });
         })
 }
 
@@ -67,7 +67,7 @@ exports.get_images = (req, res, next) => {
             }
         })
         .catch(err => {
-            res.status(500).json({ status: 500, message: 'Invalid ID provided' });
+            res.status(400).json({ status: 400, message: 'Invalid ID provided' });
         })
 }
 
@@ -97,40 +97,82 @@ exports.post_one = (req, res, next) => {
             })
         })
         .catch(err => {
-            res.status(500).json({ status: 500, message: err.message });
+            res.status(405).json({ status: 405, message: err.message });
         })
 }
 
 exports.update_one = (req, res, next) => {
     const id = req.params.id;
+    const validator = { runValidators: true };
 
-    Movie.update({ _id: id }, req.body)
-        .then(result => {
-            res.status(200).json({
-                message: 'Item updated',
-                item: result,
-                request: {
-                    type: 'GET',
-                    url: req.get('host') + '/movies/' + id
-                }
-            })
+    Movie.findById(id)
+        .then(movieObj => {
+            // if (movieObj._id) {
+            Movie.updateOne({ _id: id }, req.body, validator)
+                .then(result => {
+                    res.status(200).json({
+                        message: 'Item updated',
+                        item: result,
+                        request: {
+                            type: 'GET',
+                            url: req.get('host') + '/movies/' + movieObj._id
+                        }
+                    })
+                })
+                .catch(err => {
+                    res.status(405).json({
+                        status: 405,
+                        readMessage: 'Error in input validation',
+                        message: err.message,
+                    });
+                })
+            // }
+            // else {
+            //     res.status(400).json({ 
+            //         status: 400, 
+            //         message: 'Invalid ID supplied' })
+            // }
+
         })
         .catch(err => {
-            res.status(500).json({ status: 500, message: err.message });
+            res.status(404).json({
+                status: 404,
+                readMessage: 'Movie to update not found',
+                message: err.message,
+            });
         })
+
 }
 
 exports.delete_one = (req, res, next) => {
     const id = req.params.id;
-    Movie.deleteOne({ _id: id })
-        .exec()
-        .then(result => {
-            res.status(200).json({
-                message: 'Item deleted',
-                item: result
-            })
+    Movie.findById(id)
+        .then(movieObj => {
+            if(movieObj) {
+                Movie.deleteOne({ _id: id })
+                .exec()
+                .then(result => {
+                    res.status(200).json({
+                        message: 'Item deleted',
+                        item: result
+                    })
+                })
+                .catch(err => {
+                    res.status(400).json({ status: 400, message: err.message });
+                })
+            }
+            else {
+                res.status(400).json({ status: 400, message: 'Invalid ID provided' });
+            }
+            
         })
         .catch(err => {
-            res.status(500).json({ status: 500, message: err.message });
+            res.status(404).json({
+                status: 404,
+                readMessage: 'Movie to delete not found',
+                message: err.message,
+            });
         })
+
+
 }

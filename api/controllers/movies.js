@@ -1,28 +1,28 @@
-const mongoose = require('mongoose');
-const Movie = require('../models/movie');
+const mongoose = require("mongoose");
+const Movie = require("../models/movie");
 
 
 //REDIS SETUP
 
-const redis = require('redis');
+const redis = require("redis");
 
-var redisClient = redis.createClient({ host: 'localhost', port: 6379 });
+var redisClient = redis.createClient({ host: "localhost", port: 6379 });
 
-redisClient.on('ready', function () {
-    console.log('Redis is ready');
+redisClient.on("ready", function () {
+    console.log("Redis is ready");
 });
 
-redisClient.on('error', function () {
-    console.log('Error in Redis');
+redisClient.on("error", function () {
+    console.log("Error in Redis");
 });
 
-redisClient.expire('redisClient', 3600);
+redisClient.expire("redisClient", 3600);
 
 
 // METHODS
 
 exports.get_all = (req, res) => {
-    redisClient.get('/movies', function (err) {
+    redisClient.get("/movies", function (err) {
         if (err) {
             res.status(500).json(err.message);
         }
@@ -33,23 +33,30 @@ exports.get_all = (req, res) => {
 exports.get_one = (req, res) => {
     const id = req.params.id;
     Movie.findById(id)
-        .select('-__v')
+        .select("-__v")
         .then(result => {
             if (result) {
                 res.status(200).json({
                     item: result,
                     request: {
-                        type: 'GET',
-                        url: req.get('host') + '/movies/' + result._id
+                        type: "GET",
+                        url: req.get("host") + "/movies/" + result._id
                     }
                 });
             }
             else {
-                res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
+                res.status(404).json({
+                    status: 404,
+                    message: "The provided ID does not match any movie"
+                });
             }
         })
         .catch(err => {
-            res.status(400).json({ status: 400, readMessage: 'Invalid ID provided', error: err.message });
+            res.status(400).json({
+                status: 400,
+                readMessage: "Invalid ID provided",
+                error: err.message
+            });
         });
 };
 
@@ -58,18 +65,27 @@ exports.get_images = (req, res) => {
     const type = req.params.type;
     Movie.findById(id)
         .then(result => {
-            if (type === 'poster' || type === 'cover' || type === 'background') {
-                imgType = result.images[type];
-                res.status(200).json({ posterImage: imgType })
+            if (type === "poster" ||
+                type === "cover" ||
+                type === "background") {
+                const imgType = result.images[type];
+                res.status(200).json({ posterImage: imgType });
             }
             else {
-                res.status(404).json({ status: 404, readMessage: 'type of image not found' })
+                res.status(404).json({
+                    status: 404,
+                    readMessage: "type of image not found"
+                });
             }
         })
         .catch(err => {
-            res.status(400).json({ status: 400, readMessage: 'Invalid ID provided', error: err.message });
-        })
-}
+            res.status(400).json({
+                status: 400,
+                readMessage: "Invalid ID provided",
+                error: err.message
+            });
+        });
+};
 
 exports.post_one = (req, res) => {
 
@@ -91,17 +107,20 @@ exports.post_one = (req, res) => {
             res.status(200).json({
                 item: result,
                 request: {
-                    type: 'GET',
-                    url: req.get('host') + '/movies/' + result._id
+                    type: "GET",
+                    url: req.get("host") + "/movies/" + result._id
                 }
             });
         })
         .catch(err => {
-            res.status(405).json({ status: 405, message: err.message });
+            res.status(405).json({
+                status: 405,
+                message: err.message
+            });
         });
 };
 
-exports.update_one = (req, res, next) => {
+exports.update_one = (req, res) => {
     const id = req.params.id;
     const validator = { runValidators: true };
 
@@ -110,18 +129,18 @@ exports.update_one = (req, res, next) => {
             Movie.updateOne({ _id: id }, req.body, validator)
                 .then(result => {
                     res.status(200).json({
-                        message: 'Item updated',
+                        message: "Item updated",
                         item: result,
                         request: {
-                            type: 'GET',
-                            url: req.get('host') + '/movies/' + movieObj._id
+                            type: "GET",
+                            url: req.get("host") + "/movies/" + movieObj._id
                         }
                     });
                 })
                 .catch(err => {
                     res.status(405).json({
                         status: 405,
-                        readMessage: 'Error in input validation',
+                        readMessage: "Error in input validation",
                         message: err.message,
                     });
                 });
@@ -129,7 +148,7 @@ exports.update_one = (req, res, next) => {
         .catch(err => {
             res.status(404).json({
                 status: 404,
-                readMessage: 'Movie to update not found',
+                readMessage: "Movie to update not found",
                 message: err.message,
             });
         });
@@ -144,22 +163,28 @@ exports.delete_one = (req, res) => {
                     .exec()
                     .then(result => {
                         res.status(200).json({
-                            message: 'Item deleted',
+                            message: "Item deleted",
                             item: result
                         });
                     })
                     .catch(err => {
-                        res.status(400).json({ status: 400, message: err.message });
-                    })
+                        res.status(400).json({
+                            status: 400,
+                            message: err.message
+                        });
+                    });
             }
             else {
-                res.status(400).json({ status: 400, message: 'Invalid ID provided' });
+                res.status(400).json({
+                    status: 400,
+                    message: "Invalid ID provided"
+                });
             }
         })
         .catch(err => {
             res.status(404).json({
                 status: 404,
-                readMessage: 'Movie to delete not found',
+                readMessage: "Movie to delete not found",
                 message: err.message,
             });
         });

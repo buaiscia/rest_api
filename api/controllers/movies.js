@@ -5,7 +5,12 @@ const Movie = require("../models/movie");
 
 const redis = require("redis");
 
-var redisClient = redis.createClient({ host: "localhost", port: 6379 });
+const host = process.env.redis_server_addr;
+
+const redisClient = redis.createClient({ 
+    host: host, 
+    port: 6379 
+  });
 
 redisClient.on("ready", function () {
   console.log("Redis is ready");

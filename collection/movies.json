@@ -3,19 +3,20 @@
 		"title": "try10",
 		"director": "try20",
 		"description": "try30sdasdasdasdasdasdas sdfasdasdasdasd dasdas",
-		"duration": 1,
+		"duration": 100,
 		"images": {
 			"poster": "dasdasdasd"
 		},
-		"genre": "scifi"
+		"genre": "Scifi"
 	},
 	{
 		"title": "try100",
 		"director": "try200",
+		"description": "try30sdasdasdasdasdasdas sdfasdasdasdasd dasdas",
 		"duration": 150,
 		"images": {
 			"poster": "343244325252"
 		},
-		"genre": "scifi"
+		"genre": "Scifi"
 	}
 ]

@@ -9,11 +9,11 @@ const redis = require('redis');
 var redisClient = redis.createClient({ host: 'localhost', port: 6379 });
 
 redisClient.on('ready', function () {
-    console.log("Redis is ready");
+    console.log('Redis is ready');
 });
 
 redisClient.on('error', function () {
-    console.log("Error in Redis");
+    console.log('Error in Redis');
 });
 
 redisClient.expire('redisClient', 3600);
@@ -21,16 +21,16 @@ redisClient.expire('redisClient', 3600);
 
 // METHODS
 
-exports.get_all = (req, res, next) => {
-    redisClient.get("/movies", function (err) {
+exports.get_all = (req, res) => {
+    redisClient.get('/movies', function (err) {
         if (err) {
             res.status(500).json(err.message);
         }
-        res.json(res.paginatedResults)
-    })
-}
+        res.json(res.paginatedResults);
+    });
+};
 
-exports.get_one = (req, res, next) => {
+exports.get_one = (req, res) => {
     const id = req.params.id;
     Movie.findById(id)
         .select('-__v')
@@ -42,18 +42,18 @@ exports.get_one = (req, res, next) => {
                         type: 'GET',
                         url: req.get('host') + '/movies/' + result._id
                     }
-                })
+                });
             }
             else {
                 res.status(404).json({ status: 404, message: 'The provided ID does not match any movie' });
             }
         })
         .catch(err => {
-            res.status(400).json({ status: 400, message: 'Invalid ID provided' });
-        })
-}
+            res.status(400).json({ status: 400, readMessage: 'Invalid ID provided', error: err.message });
+        });
+};
 
-exports.get_images = (req, res, next) => {
+exports.get_images = (req, res) => {
     const id = req.params.id;
     const type = req.params.type;
     Movie.findById(id)
@@ -63,15 +63,15 @@ exports.get_images = (req, res, next) => {
                 res.status(200).json({ posterImage: imgType })
             }
             else {
-                res.status(404).json({ status: 404, message: 'type of image not found' })
+                res.status(404).json({ status: 404, readMessage: 'type of image not found' })
             }
         })
         .catch(err => {
-            res.status(400).json({ status: 400, message: 'Invalid ID provided' });
+            res.status(400).json({ status: 400, readMessage: 'Invalid ID provided', error: err.message });
         })
 }
 
-exports.post_one = (req, res, next) => {
+exports.post_one = (req, res) => {
 
     const movie = new Movie({
         _id: new mongoose.Types.ObjectId(),
@@ -94,12 +94,12 @@ exports.post_one = (req, res, next) => {
                     type: 'GET',
                     url: req.get('host') + '/movies/' + result._id
                 }
-            })
+            });
         })
         .catch(err => {
             res.status(405).json({ status: 405, message: err.message });
-        })
-}
+        });
+};
 
 exports.update_one = (req, res, next) => {
     const id = req.params.id;
@@ -107,7 +107,6 @@ exports.update_one = (req, res, next) => {
 
     Movie.findById(id)
         .then(movieObj => {
-            // if (movieObj._id) {
             Movie.updateOne({ _id: id }, req.body, validator)
                 .then(result => {
                     res.status(200).json({
@@ -117,7 +116,7 @@ exports.update_one = (req, res, next) => {
                             type: 'GET',
                             url: req.get('host') + '/movies/' + movieObj._id
                         }
-                    })
+                    });
                 })
                 .catch(err => {
                     res.status(405).json({
@@ -125,14 +124,7 @@ exports.update_one = (req, res, next) => {
                         readMessage: 'Error in input validation',
                         message: err.message,
                     });
-                })
-            // }
-            // else {
-            //     res.status(400).json({ 
-            //         status: 400, 
-            //         message: 'Invalid ID supplied' })
-            // }
-
+                });
         })
         .catch(err => {
             res.status(404).json({
@@ -140,31 +132,29 @@ exports.update_one = (req, res, next) => {
                 readMessage: 'Movie to update not found',
                 message: err.message,
             });
-        })
+        });
+};
 
-}
-
-exports.delete_one = (req, res, next) => {
+exports.delete_one = (req, res) => {
     const id = req.params.id;
     Movie.findById(id)
         .then(movieObj => {
-            if(movieObj) {
+            if (movieObj) {
                 Movie.deleteOne({ _id: id })
-                .exec()
-                .then(result => {
-                    res.status(200).json({
-                        message: 'Item deleted',
-                        item: result
+                    .exec()
+                    .then(result => {
+                        res.status(200).json({
+                            message: 'Item deleted',
+                            item: result
+                        });
                     })
-                })
-                .catch(err => {
-                    res.status(400).json({ status: 400, message: err.message });
-                })
+                    .catch(err => {
+                        res.status(400).json({ status: 400, message: err.message });
+                    })
             }
             else {
                 res.status(400).json({ status: 400, message: 'Invalid ID provided' });
             }
-            
         })
         .catch(err => {
             res.status(404).json({
@@ -172,7 +162,5 @@ exports.delete_one = (req, res, next) => {
                 readMessage: 'Movie to delete not found',
                 message: err.message,
             });
-        })
-
-
-}
+        });
+};

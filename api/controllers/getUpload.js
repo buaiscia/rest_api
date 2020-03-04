@@ -1,15 +1,11 @@
-const mongoose = require('mongoose');
-const Movie = require('../models/movie');
 
 
 
 exports.post = function (req, res) {
 
     const formidable = require('formidable');
-    const path = require('path');
-    const fs = require("fs");
-    const assert = require('assert');
-
+    const fs = require('fs');
+    const mongoose = require('mongoose');
     const Movie = require('../models/movie');
 
 
@@ -41,18 +37,14 @@ exports.post = function (req, res) {
                 res.status(400).json({
                     message: 'Bad request',
                     error: err.message
-                })
+                });
             }
             else {
                 res.status(200).json({
                     message: 'Collection uploaded'
-                })
+                });
             }
 
         });
     });
-
-
-
-
 }

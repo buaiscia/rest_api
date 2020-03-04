@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+const Movie = require('../models/movie');
 
 
 
@@ -28,20 +30,29 @@ exports.post = function (req, res) {
     });
 
     form.on('file', function (name, file) {
-        console.log('Uploaded ' + file.name);
+        console.log('Downloaded ' + file.name);
         file.path = 'collection/' + file.name;
         let pathFile = file.path;
         let fileToRead = fs.readFileSync(pathFile, 'utf-8');
         let parsed = JSON.parse(fileToRead);
-        console.log(parsed);
-        Movie.collection.insertMany(parsed, function (err, r) {
-            assert.equal(null, err);
+
+        Movie.insertMany(parsed, function (err) {
+            if (err) {
+                res.status(400).json({
+                    message: 'Bad request',
+                    error: err.message
+                })
+            }
+            else {
+                res.status(200).json({
+                    message: 'Collection uploaded'
+                })
+            }
+
         });
     });
 
-    res.sendFile('upload.html', {
-        root: path.join(__dirname, '../views/')
-    });
+
 
 
 }

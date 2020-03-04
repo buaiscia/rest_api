@@ -5,21 +5,21 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 
-
-
 const app = express();
 
-app.use(express.static(__dirname + '/view'));
+// CALL MODULES
 
+app.use(express.static(__dirname + '/view'));
+app.use(express.static(__dirname + "/api/public"));
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(logger('dev'));
+
 
 //  MONGODB SETUP
 
 const url = process.env.DATABASEURL || 'mongodb://localhost:27017'
-
 const dbName = 'moviesDB';
 
 mongoose.connect(`${url}/${dbName}`,
@@ -34,11 +34,8 @@ mongoose.connect(`${url}/${dbName}`,
         console.error('Database connection error');
     });
 
-// CALL MODULES
 
-app.use(express.json());
-
-//SETUP CORS
+    //SETUP HEADERS
 
 // const allowedOrigins = ['http://localhost:3000',
 //     'http://someotherproxy'];
@@ -66,7 +63,6 @@ app.use((req, res, next) => {
 })
 
 
-app.use(express.static(__dirname + "/api/public"));
 
 // SET ROUTES
 
@@ -76,14 +72,10 @@ const uploadRoute = require('./api/routes/upload')
 
 // USE ROUTES
 
-
 app.use('/upload', uploadRoute)
-
 app.use('/', indexRoute)
 
-// app.get('*', function (req, res) {
-//     res.status(404).send('Page not found');
-// });
+//ERROR/404 ROUTES
 
 app.use((req, res, next) => {
     const error = new Error('Page not found');

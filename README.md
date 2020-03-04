@@ -4,12 +4,7 @@ Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 
 ## Getting started
 
-Install packages
-
-```npm install```
-
 --- Docker -----------
-
 
 ## Structure
 
@@ -105,9 +100,3 @@ Optional tasks:
 5. Create a Postman collection for accessing your API and export it to the repository (We will love you for
 that)
 6. Integrate your project with a CI service (Travis, for example) to further grab our attention
-
-
-### Issues
-
-- fix missing validation in upload file
-- redirect or message after upload

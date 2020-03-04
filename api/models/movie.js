@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     duration: {
         type: Number,
         required: [true, 'Duration is mandatory'],
-        min: [10, 'Time is too little']
+        min: [10, 'Time is too little, min is 10']
     },
     releaseDate: {
         type: String,

@@ -4,7 +4,27 @@ Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 
 ## Getting started
 
---- Docker -----------
+- Have Docker running
+- Run 'docker-compose up'. This will start Redis, MongoDB and the application
+- The application will be accessible on http://localhost
+- The API entry point is /movies
+- Requests are documented in the file openapi.json and in the postman collection file. Requests available are GET, POST, PATCH, DELETE
+- To access an API endpoint from another application, it's possible, in the example of fetching one movie data, to make a GET ruquest on the endpoint hostname/movie/:id
+
+## Upload bulk collection file
+
+### Manually
+
+- Go to /upload and upload the file through the form. The file will be saved into the collection folder and automatically transfer the items to mongoDB
+
+### via API
+
+- Make a POSTMAN or similar POST request to /upload, no headers, body: form-data, with file option
+
+## Queries
+
+It's possible to search for title or genre, adding params.query.title  ( /movies?search=** ) or genre ( /movies?genre=*** ).
+Pagination is available on all queries through query.page and query.limit ( /movies?genre=scifi&page=1&limit=5)
 
 ## Structure
 
@@ -57,46 +77,9 @@ Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 | genre          | search string matching with genres                    | /movies?genre=scifi      |
 | page=*&limit=* | set visualized page and number of items per each page | /movies?page=1&limit=5   |
 
-## UPLOAD FILE
+### Notes
 
-### Manually
-
-- Go to /upload and upload the file through the form. The file will be saved into the collection folder and automatically transfer the items to mongoDB
-
-### via API
-
-- Make a POSTMAN or similar POST request to /upload, no headers, body: form-data, with file option
-
+- There's a unit test for GET/POST requests
+- S3 image upload/retrieval and CI integration optional points were not done
 
 --------------------------------
-
-A movie should have at least the following fields (feel free to add more):
-- title
-- description
-- shortDescription
-- duration
-- releaseDate
-- images (an object with the url of the image for the cover, for the poster, etc)
-- genres
-1. The GET /movies endpoint should list all movies and work with pagination.
-2. It should be possible to retrieve only 1 movie as well.
-3. Provide an easy way to populate the movies collection/table, like a file that could be imported directly to
-the database or via the API in bulk mode.
-
-4. The infrastructure to serve the API should be entirely configured using Docker with docker-compose
-5. Use OOP
-6. Preferably use TypeScript
-7. Use MongoDB or PostgreSQL for the database
-8. Document the endpoints in an OpenAPI (JSON) file in the repository
-9. Care about input validation and error handling with correct HTTP codes
-10. Use a logger
-11. Write your code as production grade.
-
-Optional tasks:
-1. Cache the GET /movies endpoint using Redis and deal with cache invalidation
-2. Implement search functionality for the movies
-3. Create at least one integration test or unit test
-4. Image upload and retrieval from S3 using the AWS SDK
-5. Create a Postman collection for accessing your API and export it to the repository (We will love you for
-that)
-6. Integrate your project with a CI service (Travis, for example) to further grab our attention

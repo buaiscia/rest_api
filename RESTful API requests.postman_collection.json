@@ -1,0 +1,529 @@
+{
+	"info": {
+		"_postman_id": "41b7c52b-12ad-4959-abc4-5dae7343e9b5",
+		"name": "RESTful API requests",
+		"description": "Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET_all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/movies/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GET_all",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/movies/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "668"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"29c-ynclbQMXluvoryawZSJGAwCWoeU\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:29:54 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"results\": [\n        {\n            \"images\": {\n                \"poster\": \"persuasion_poster.png\"\n            },\n            \"_id\": \"5e60c68525766b001019e09a\",\n            \"title\": \"Persuasion\",\n            \"director\": \"Adrian Shergold\",\n            \"description\": \"An unmarried woman (Sally Hawkins) encounters her former love (Rupert Penry-Jones) after he returns from battle.\",\n            \"duration\": 120,\n            \"genre\": \"Romance\"\n        },\n        {\n            \"images\": {\n                \"poster\": \"star_wars_the_force_awakens_poster.png\"\n            },\n            \"_id\": \"5e60c68525766b001019e09b\",\n            \"title\": \"Star Wars The Force Awakens\",\n            \"director\": \"J.J. Abrams\",\n            \"description\": \"tThirty years after the Galactic Civil War, the First Order has risen from the fallen Galactic Empire and seeks to eliminate the New Republic.\",\n            \"duration\": 120,\n            \"genre\": \"Scifi\"\n        }\n    ],\n    \"countFound\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "GET_one",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/movies/5e60c68525766b001019e09a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						"5e60c68525766b001019e09a"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GET_one",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/movies/5e60c68525766b001019e09b/images/poster",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								"5e60c68525766b001019e09b",
+								"images",
+								"poster"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "374"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"176-eUTM4s9WdP73z/o2njPvHSRPee0\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:30:39 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"images\": {\n            \"poster\": \"persuasion_poster.png\"\n        },\n        \"_id\": \"5e60c68525766b001019e09a\",\n        \"title\": \"Persuasion\",\n        \"director\": \"Adrian Shergold\",\n        \"description\": \"An unmarried woman (Sally Hawkins) encounters her former love (Rupert Penry-Jones) after he returns from battle.\",\n        \"duration\": 120,\n        \"genre\": \"Romance\"\n    },\n    \"request\": {\n        \"type\": \"GET\",\n        \"url\": \"localhost/movies/5e60c68525766b001019e09a\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "GET_image_type_by_movie",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/movies/5e60c68525766b001019e09b/images/poster",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						"5e60c68525766b001019e09b",
+						"images",
+						"poster"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GET_image_type_by_movie",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"title\": \"Joker\",\n\t\t\"director\": \"Todd Philips\",\n\t\t\"description\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City. Gotham is rife with crime and unemployment, leaving swathes of the population disenfranchised and impoverished.\",\n\t\t\"shortDescription\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City.\",\n\t\t\"releaseDate\": \"2020-06-12\"\n\t\t\"duration\": 120,\n\t\t\"images\": {\n\t\t\t\"cover\": \"joker_cover.png\"\n\t\t\t\"poster\": \"joker_poster.png\"\n\t\t},\n\t\t\"genre\": \"Scifi\",\n\t\t\"childrenFriendly\" : false\n\t}"
+						},
+						"url": {
+							"raw": "http://localhost/movies/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "56"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"38-RQ00wU4PREIS/pFG922Jun6SZuk\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:31:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"posterImage\": \"star_wars_the_force_awakens_poster.png\"\n}"
+				}
+			]
+		},
+		{
+			"name": "POST_one",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"title\": \"Joker\",\n\t\t\"director\": \"Todd Philips\",\n\t\t\"description\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City. Gotham is rife with crime and unemployment, leaving swathes of the population disenfranchised and impoverished.\",\n\t\t\"shortDescription\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City.\",\n\t\t\"releaseDate\": \"2020-06-12\",\n\t\t\"duration\": 120,\n\t\t\"images\": {\n\t\t\t\"cover\": \"joker_cover.png\",\n\t\t\t\"poster\": \"joker_poster.png\"\n\t\t},\n\t\t\"genre\": \"Scifi\",\n\t\t\"childrenFriendly\" : false\n\t}"
+				},
+				"url": {
+					"raw": "http://localhost/movies/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "POST_one",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"title\": \"Joker\",\n\t\t\"director\": \"Todd Philips\",\n\t\t\"description\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City. Gotham is rife with crime and unemployment, leaving swathes of the population disenfranchised and impoverished.\",\n\t\t\"shortDescription\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City.\",\n\t\t\"releaseDate\": \"2020-06-12\",\n\t\t\"duration\": 120,\n\t\t\"images\": {\n\t\t\t\"cover\": \"joker_cover.png\",\n\t\t\t\"poster\": \"joker_poster.png\"\n\t\t},\n\t\t\"genre\": \"Scifi\",\n\t\t\"childrenFriendly\" : false\n\t}"
+						},
+						"url": {
+							"raw": "http://localhost/movies/5e60cade25766b001019e09d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								"5e60cade25766b001019e09d"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "717"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2cd-gmgTzwreriN/m28FLipIFYdoV4Q\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:48:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"item\": {\n        \"_id\": \"5e60cade25766b001019e09d\",\n        \"title\": \"Joker\",\n        \"director\": \"Todd Philips\",\n        \"description\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City. Gotham is rife with crime and unemployment, leaving swathes of the population disenfranchised and impoverished.\",\n        \"shortDescription\": \"In 1981, party clown and aspiring stand-up comedian Arthur Fleck lives with his mother, Penny, in Gotham City.\",\n        \"duration\": 120,\n        \"releaseDate\": \"2020-06-12T00:00:00.000Z\",\n        \"images\": {\n            \"cover\": \"joker_cover.png\",\n            \"poster\": \"joker_poster.png\",\n            \"background\": \"\"\n        },\n        \"genre\": \"Scifi\",\n        \"childrenFriendly\": false,\n        \"__v\": 0\n    },\n    \"request\": {\n        \"type\": \"GET\",\n        \"url\": \"localhost/movies/5e60cade25766b001019e09d\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "PATCH_one",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"Thirty years after the Galactic Civil War, the First Order has risen from the fallen Galactic Empire and seeks to eliminate the New Republic.\"\n}\n"
+				},
+				"url": {
+					"raw": "localhost/movies/5e60c68525766b001019e09b",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						"5e60c68525766b001019e09b"
+					]
+				},
+				"description": "Correcting typo in description"
+			},
+			"response": [
+				{
+					"name": "PATCH_one",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Thirty years after the Galactic Civil War, the First Order has risen from the fallen Galactic Empire and seeks to eliminate the New Republic.\"\n}\n"
+						},
+						"url": {
+							"raw": "localhost/movies/5e60c68525766b001019e09b",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								"5e60c68525766b001019e09b"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "137"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"89-v698tWtB+/aFDUNxSaCNnnyGi/g\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:54:34 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Item updated\",\n    \"item\": {\n        \"n\": 1,\n        \"nModified\": 1,\n        \"ok\": 1\n    },\n    \"request\": {\n        \"type\": \"GET\",\n        \"url\": \"localhost/movies/5e60c68525766b001019e09b\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "DELETE_one",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost/movies/5e60c68525766b001019e09a",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"movies",
+						"5e60c68525766b001019e09a"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "DELETE_one",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost/movies/5e60c68525766b001019e09a",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"movies",
+								"5e60c68525766b001019e09a"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "65"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"41-+ymaxAwMWRFIePThN/wcLnjC8Og\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 05 Mar 2020 09:55:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Item deleted\",\n    \"item\": {\n        \"n\": 1,\n        \"ok\": 1,\n        \"deletedCount\": 1\n    }\n}"
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}

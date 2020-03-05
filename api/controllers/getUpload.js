@@ -4,6 +4,8 @@ exports.post = function (req, res) {
   const mongoose = require("mongoose");
   const Movie = require("../models/movie");
 
+  // FORMIDABLE
+
   const form = new formidable.IncomingForm({ multiples: true });
   form.uploadDir = "collection/";
 

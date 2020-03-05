@@ -6,12 +6,14 @@ Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 
 - Have Docker running
 - Run 'docker-compose up'. This will start Redis, MongoDB and the application
-- The application will be accessible on http://localhost
+- The application will be accessible on http://localhost and it will be running inside docker on port 3000
 - The API entry point is /movies
 - Requests are documented in the file openapi.json and in the postman collection file. Requests available are GET, POST, PATCH, DELETE
 - To access an API endpoint from another application, it's possible, in the example of fetching one movie data, to make a GET ruquest on the endpoint hostname/movie/:id
 
 ## Upload bulk collection file
+
+An example of JSON bulk file to upload in DB is already in the collection folder.
 
 ### Manually
 
@@ -19,7 +21,7 @@ Backend RESTful API  with all CRUD operations using NodeJS, MongoDB and Redis
 
 ### via API
 
-- Make a POSTMAN or similar POST request to /upload, no headers, body: form-data, with file option
+- Make a POSTMAN or similar POST request to /upload, no headers, body: form-data, with file option. The file will be saved into the collection folder and automatically transfer the items to mongoDB
 
 ## Queries
 
@@ -28,7 +30,9 @@ Pagination is available on all queries through query.page and query.limit ( /mov
 
 ## Structure
 
-- [README.md](README.md)
+ - [Dockerfile](Dockerfile)
+   - [README.md](README.md)
+   - [RESTful API requests.postman\_collection.json](RESTful%20API%20requests.postman_collection.json)
    - __api__
      - __controllers__
        - [getUpload.js](api/controllers/getUpload.js)
@@ -51,7 +55,9 @@ Pagination is available on all queries through query.page and query.limit ( /mov
        - [upload.html](api/views/upload.html)
    - __collection__
      - [movies.json](collection/movies.json)
+   - [docker\-compose.yml](docker-compose.yml)
    - [node\_modules](node_modules)
+   - [openapi.json](openapi.json)
    - [package\-lock.json](package-lock.json)
    - [package.json](package.json)
    - [server.js](server.js)

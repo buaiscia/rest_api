@@ -22,6 +22,7 @@ redisClient.on("error", function () {
 
 redisClient.expire("redisClient", 3600);
 
+
 // METHODS
 
 exports.get_all = (req, res) => {

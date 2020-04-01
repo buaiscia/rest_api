@@ -5,6 +5,12 @@ const logger = require("morgan");
 
 const app = express();
 
+const swaggerUi = require('swagger-ui-express');
+const openApiDocumentation = require('./openapi.json');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
+
+
 // CONFIGURATION
 
 app.use(express.static(__dirname + "/view"));
@@ -16,7 +22,7 @@ app.use(logger("dev"));
 
 //  MONGODB SETUP
 
-const url = process.env.DATABASEURL || "mongodb://mongo:27017";
+const url = process.env.DATABASEURL || "mongodb://localhost:27017";
 const dbName = "moviesDB";
 
 mongoose

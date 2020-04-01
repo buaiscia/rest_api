@@ -5,7 +5,8 @@ const Movie = require("../models/movie");
 
 const redis = require("redis");
 
-const host = process.env.redis_server_addr;
+// const host = process.env.redis_server_addr;
+const host = "localhost";
 
 const redisClient = redis.createClient({ 
     host: host, 
@@ -16,8 +17,8 @@ redisClient.on("ready", function () {
   console.log("Redis is ready");
 });
 
-redisClient.on("error", function () {
-  console.log("Error in Redis");
+redisClient.on("error", function (err) {
+  console.log("Error in Redis:" + err);
 });
 
 redisClient.expire("redisClient", 3600);

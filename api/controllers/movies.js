@@ -6,7 +6,7 @@ const Movie = require("../models/movie");
 const redis = require("redis");
 
 // const host = process.env.redis_server_addr || "localhost"; // in use with docker
-let redisClient;
+let redisClient = '';
 
 if(process.env.REDIS_URL) {
   redisClient = redis.createClient(process.env.REDIS_URL)

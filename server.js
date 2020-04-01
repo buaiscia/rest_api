@@ -22,11 +22,20 @@ app.use(logger("dev"));
 
 //  MONGODB SETUP
 
-// const url = process.env.DATABASEURL || "mongodb://mongo:27017"; // in use with docker
-const url = process.env.DATABASEURL || "mongodb://localhost:27017"; 
-const dbName = "moviesDB";
+let url = '';
 
-mongoose
+if(process.env.DATABASEURL) {
+    url = process.env.DATABASEURL;
+    mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+}
+else {
+    // url = "mongodb://mongo:27017";  TO USE WITH DOCKER
+    const dbName = "moviesDB";
+    url = "mongodb://localhost:27017";
+    mongoose
     .connect(`${url}/${dbName}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -35,8 +44,9 @@ mongoose
         console.log("Database connection successful");
     })
     .catch(err => {
-        console.error("Database connection error");
+        console.error("Database connection error: " + err);
     });
+}
 
 //SETUP HEADERS
 

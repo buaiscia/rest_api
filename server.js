@@ -22,7 +22,8 @@ app.use(logger("dev"));
 
 //  MONGODB SETUP
 
-const url = process.env.DATABASEURL || "mongodb://localhost:27017";
+// const url = process.env.DATABASEURL || "mongodb://mongo:27017"; // in use with docker
+const url = process.env.DATABASEURL || "mongodb://localhost:27017"; 
 const dbName = "moviesDB";
 
 mongoose

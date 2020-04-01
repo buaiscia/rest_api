@@ -30,6 +30,12 @@ if(process.env.DATABASEURL) {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
+    .then(() => {
+        console.log("Database connection successful");
+    })
+    .catch(err => {
+        console.error("Database connection error: " + err);
+    });
 }
 else {
     // url = "mongodb://mongo:27017";  TO USE WITH DOCKER

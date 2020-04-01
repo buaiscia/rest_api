@@ -10,8 +10,8 @@ const host = process.env.REDIS_URL || "localhost";
 // const host = "localhost";
 
 const redisClient = redis.createClient({ 
-    host: host, 
-    port: 6379 
+    host: host
+    // port: 6379 
   });
 
 redisClient.on("ready", function () {

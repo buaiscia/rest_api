@@ -38,9 +38,9 @@ if(process.env.DATABASEURL) {
     });
 }
 else {
-    // url = "mongodb://mongo:27017";  TO USE WITH DOCKER
+    url = "mongodb://mongo:27017";  // TO USE WITH DOCKER
+    // url = "mongodb://localhost:27017"; // TO USE LOCALLY
     const dbName = "moviesDB";
-    url = "mongodb://localhost:27017";
     mongoose
     .connect(`${url}/${dbName}`, {
         useNewUrlParser: true,

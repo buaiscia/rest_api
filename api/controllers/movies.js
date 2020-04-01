@@ -12,7 +12,7 @@ if(process.env.REDIS_URL) {
   redisClient = redis.createClient(process.env.REDIS_URL)
 }
 else {
-  const host = process.env.redis_server_addr || "localhost"; // TO USE WITH DOCKER
+  const host = process.env.redis_server_addr || "localhost"; // TO USE WITH DOCKER // NEED TO HAVE A REDIS SERVER RUNNING ON THE MACHINE
   redisClient = redis.createClient({ 
     host: host,
     port: 6379 

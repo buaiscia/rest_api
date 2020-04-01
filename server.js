@@ -70,6 +70,11 @@ app.use((req, res, next) => {
     next();
 });
 
+var http = require("http");
+setInterval(function () {
+    http.get("https://restful-db-api.herokuapp.com/");
+}, 300000); // every 5 minutes (300000)
+
 // SET ROUTES
 
 const indexRoute = require("./api/routes/index");
